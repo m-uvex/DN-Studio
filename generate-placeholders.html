@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Placeholder Images</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px;
+            border-radius: 8px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Portfolio Placeholder Images</h1>
+        <p>Click the button below to generate placeholder images for the portfolio section.</p>
+        <button onclick="generateAllImages()">Generate All Images</button>
+        <button onclick="downloadAllImages()">Download All Images</button>
+        <div id="canvas-container"></div>
+    </div>
+
+    <script>
+        const portfolioItems = [
+            { name: 'portfolio-1', title: 'Cinematic Product Ad', icon: '🎬' },
+            { name: 'portfolio-2', title: 'Talking Avatar', icon: '👤' },
+            { name: 'portfolio-3', title: 'Product Photography', icon: '📸' },
+            { name: 'portfolio-4', title: 'Voiceover Demo', icon: '🎤' },
+            { name: 'portfolio-5', title: 'Movie Trailer', icon: '🎭' },
+            { name: 'portfolio-6', title: 'Video Enhancement', icon: '✨' },
+            { name: 'portfolio-7', title: 'AI Product Images', icon: '🤖' },
+            { name: 'portfolio-8', title: 'Talking Baby Avatar', icon: '👶' },
+            { name: 'portfolio-9', title: 'Hollywood Trailer', icon: '🎪' }
+        ];
+
+        function generateImage(item) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 300;
+            canvas.id = item.name;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, 400, 300);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 400, 300);
+            
+            // Add icon
+            ctx.font = '60px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.icon, 200, 120);
+            
+            // Add title
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText(item.title, 200, 200);
+            
+            // Add subtitle
+            ctx.font = '14px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillText('AI-Generated Content', 200, 230);
+            
+            return canvas;
+        }
+
+        function generateAllImages() {
+            const container = document.getElementById('canvas-container');
+            container.innerHTML = '';
+            
+            portfolioItems.forEach(item => {
+                const canvas = generateImage(item);
+                container.appendChild(canvas);
+            });
+        }
+
+        function downloadAllImages() {
+            portfolioItems.forEach(item => {
+                const canvas = document.getElementById(item.name);
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.download = `${item.name}.jpg`;
+                    link.href = canvas.toDataURL('image/jpeg', 0.8);
+                    link.click();
+                }
+            });
+        }
+
+        // Generate images on page load
+        window.onload = generateAllImages;
+    </script>
+</body>
+</html> 

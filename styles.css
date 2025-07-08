@@ -293,11 +293,13 @@ section {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border: 1px solid #f0f0f0;
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 .service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-10px) rotateX(3deg) rotateY(3deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
 }
 
 .service-icon {
@@ -364,10 +366,12 @@ section {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 .tool-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) rotateX(2deg) rotateY(2deg);
     background: rgba(255, 255, 255, 0.2);
 }
 
@@ -393,6 +397,8 @@ section {
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 .portfolio-item:hover {
@@ -402,23 +408,43 @@ section {
 
 .portfolio-image {
     height: 250px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.placeholder-image {
+.portfolio-image img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-image img {
+    transform: scale(1.1);
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 3rem;
+    color: #667eea;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.portfolio-item:hover .play-button {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 .portfolio-overlay {
@@ -445,6 +471,25 @@ section {
 .portfolio-overlay p {
     font-size: 0.9rem;
     opacity: 0.9;
+}
+
+/* 3D Tilt Effect */
+.tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.tilt-card:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.tilt-card .portfolio-image {
+    transform: translateZ(20px);
+}
+
+.tilt-card .portfolio-overlay {
+    transform: translateZ(30px);
 }
 
 /* CTA Section */
@@ -493,11 +538,13 @@ section {
     background: #f8f9fa;
     border-radius: 16px;
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 .contact-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px) rotateX(2deg) rotateY(2deg);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .contact-icon {
