@@ -166,16 +166,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     portfolioItems.forEach(item => {
         item.addEventListener('mouseenter', function() {
-            const overlay = this.querySelector('.portfolio-overlay');
-            if (overlay) {
-                overlay.style.transform = 'translateY(0)';
+            const dock = this.querySelector('.portfolio-dock');
+            if (dock) {
+                dock.style.transform = 'translateY(0)';
             }
         });
         
         item.addEventListener('mouseleave', function() {
-            const overlay = this.querySelector('.portfolio-overlay');
-            if (overlay) {
-                overlay.style.transform = 'translateY(100%)';
+            const dock = this.querySelector('.portfolio-dock');
+            if (dock) {
+                dock.style.transform = 'translateY(100%)';
             }
         });
     });
@@ -213,54 +213,42 @@ document.addEventListener('DOMContentLoaded', function() {
     portfolioItems.forEach(item => {
         const playButton = item.querySelector('.play-button');
         const youtubeId = item.getAttribute('data-youtube-id');
+        const thumbnail = item.querySelector('.portfolio-thumbnail');
+        const videoContainer = item.querySelector('.video-container');
+        const iframe = videoContainer.querySelector('iframe');
         
         if (playButton && youtubeId) {
             playButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Create YouTube embed
+                // Hide thumbnail and play button
+                thumbnail.style.display = 'none';
+                playButton.style.display = 'none';
+                
+                // Show video container and load YouTube embed
+                videoContainer.style.display = 'block';
                 const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+                iframe.src = embedUrl;
                 
-                // Create modal for video
-                const modal = document.createElement('div');
-                modal.className = 'video-modal';
-                modal.innerHTML = `
-                    <div class="video-modal-content">
-                        <div class="video-modal-header">
-                            <button class="close-video">&times;</button>
-                        </div>
-                        <iframe 
-                            width="100%" 
-                            height="100%" 
-                            src="${embedUrl}" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
+                // Add close button to video
+                const closeVideoBtn = document.createElement('div');
+                closeVideoBtn.className = 'close-video-btn';
+                closeVideoBtn.innerHTML = '<i class="fas fa-times"></i>';
+                videoContainer.appendChild(closeVideoBtn);
                 
-                document.body.appendChild(modal);
-                
-                // Close modal functionality
-                const closeBtn = modal.querySelector('.close-video');
-                closeBtn.addEventListener('click', function() {
-                    document.body.removeChild(modal);
-                });
-                
-                // Close on outside click
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        document.body.removeChild(modal);
-                    }
-                });
-                
-                // Close on ESC key
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && document.body.contains(modal)) {
-                        document.body.removeChild(modal);
-                    }
+                // Close video functionality
+                closeVideoBtn.addEventListener('click', function() {
+                    // Hide video container
+                    videoContainer.style.display = 'none';
+                    iframe.src = '';
+                    
+                    // Show thumbnail and play button again
+                    thumbnail.style.display = 'block';
+                    playButton.style.display = 'flex';
+                    
+                    // Remove close button
+                    videoContainer.removeChild(closeVideoBtn);
                 });
             });
         }
