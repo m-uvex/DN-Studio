@@ -423,6 +423,21 @@ section {
     transform: scale(1.1);
 }
 
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 .play-button {
     position: absolute;
     top: 50%;
@@ -440,6 +455,7 @@ section {
     opacity: 0;
     transition: all 0.3s ease;
     cursor: pointer;
+    z-index: 3;
 }
 
 .portfolio-item:hover .play-button {
@@ -447,30 +463,56 @@ section {
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-.portfolio-overlay {
+.portfolio-dock {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
     color: white;
-    padding: 2rem;
+    padding: 1rem;
     transform: translateY(100%);
     transition: transform 0.3s ease;
+    z-index: 1;
 }
 
-.portfolio-item:hover .portfolio-overlay {
+.portfolio-item:hover .portfolio-dock {
     transform: translateY(0);
 }
 
-.portfolio-overlay h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
+.portfolio-dock h3 {
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
-.portfolio-overlay p {
-    font-size: 0.9rem;
+.portfolio-dock p {
+    font-size: 0.8rem;
     opacity: 0.9;
+    margin: 0;
+}
+
+.close-video-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 4;
+}
+
+.close-video-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
 }
 
 /* 3D Tilt Effect */
@@ -490,68 +532,6 @@ section {
 
 .tilt-card .portfolio-overlay {
     transform: translateZ(30px);
-}
-
-/* Video Modal */
-.video-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.video-modal-content {
-    width: 90%;
-    height: 80%;
-    max-width: 1000px;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-.video-modal-header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 10001;
-    padding: 20px;
-}
-
-.close-video {
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.close-video:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 /* CTA Section */
