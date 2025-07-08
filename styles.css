@@ -145,6 +145,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-menu {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-link {
