@@ -206,6 +206,67 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// YouTube Video Embed Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const portfolioItems = document.querySelectorAll('.portfolio-item[data-youtube-id]');
+    
+    portfolioItems.forEach(item => {
+        const playButton = item.querySelector('.play-button');
+        const youtubeId = item.getAttribute('data-youtube-id');
+        
+        if (playButton && youtubeId) {
+            playButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Create YouTube embed
+                const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+                
+                // Create modal for video
+                const modal = document.createElement('div');
+                modal.className = 'video-modal';
+                modal.innerHTML = `
+                    <div class="video-modal-content">
+                        <div class="video-modal-header">
+                            <button class="close-video">&times;</button>
+                        </div>
+                        <iframe 
+                            width="100%" 
+                            height="100%" 
+                            src="${embedUrl}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Close modal functionality
+                const closeBtn = modal.querySelector('.close-video');
+                closeBtn.addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // Close on outside click
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+                
+                // Close on ESC key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && document.body.contains(modal)) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            });
+        }
+    });
+});
+
 // Tool Items Animation
 document.addEventListener('DOMContentLoaded', function() {
     const toolItems = document.querySelectorAll('.tool-item');
