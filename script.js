@@ -241,50 +241,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// YouTube Video Embed Functionality
+// YouTube Video Hover-to-Play Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const portfolioItems = document.querySelectorAll('.portfolio-item[data-youtube-id]');
     
     portfolioItems.forEach(item => {
-        const playButton = item.querySelector('.play-button');
         const youtubeId = item.getAttribute('data-youtube-id');
         const thumbnail = item.querySelector('.portfolio-thumbnail');
         const videoContainer = item.querySelector('.video-container');
         const iframe = videoContainer.querySelector('iframe');
+        let isPlaying = false;
         
-        if (playButton && youtubeId) {
-            playButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Hide thumbnail and play button
-                thumbnail.style.display = 'none';
-                playButton.style.display = 'none';
-                
-                // Show video container and load YouTube embed
-                videoContainer.style.display = 'block';
-                const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
-                iframe.src = embedUrl;
-                
-                // Add close button to video
-                const closeVideoBtn = document.createElement('div');
-                closeVideoBtn.className = 'close-video-btn';
-                closeVideoBtn.innerHTML = '<i class="fas fa-times"></i>';
-                videoContainer.appendChild(closeVideoBtn);
-                
-                // Close video functionality
-                closeVideoBtn.addEventListener('click', function() {
-                    // Hide video container
-                    videoContainer.style.display = 'none';
+        if (youtubeId) {
+            // Mouse enter - start video
+            item.addEventListener('mouseenter', function() {
+                if (!isPlaying) {
+                    // Hide thumbnail
+                    thumbnail.style.display = 'none';
+                    
+                    // Show video container and load YouTube embed
+                    videoContainer.style.display = 'block';
+                    const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=1`;
+                    iframe.src = embedUrl;
+                    isPlaying = true;
+                }
+            });
+            
+            // Mouse leave - stop video and show thumbnail
+            item.addEventListener('mouseleave', function() {
+                if (isPlaying) {
+                    // Stop video by clearing src
                     iframe.src = '';
                     
-                    // Show thumbnail and play button again
-                    thumbnail.style.display = 'block';
-                    playButton.style.display = 'flex';
+                    // Hide video container
+                    videoContainer.style.display = 'none';
                     
-                    // Remove close button
-                    videoContainer.removeChild(closeVideoBtn);
-                });
+                    // Show thumbnail again
+                    thumbnail.style.display = 'block';
+                    isPlaying = false;
+                }
             });
         }
     });
