@@ -749,7 +749,8 @@ section {
     margin: 0 auto;
 }
 
-.portfolio-item {
+/* Video Card Component */
+.video-card {
     position: relative;
     border-radius: 20px;
     overflow: hidden;
@@ -759,139 +760,155 @@ section {
     perspective: 1000px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    animation: portfolioFloat 8s ease-in-out infinite;
     cursor: pointer;
+    height: 300px;
 }
 
-.portfolio-item:nth-child(2) { animation-delay: 1s; }
-.portfolio-item:nth-child(3) { animation-delay: 2s; }
-.portfolio-item:nth-child(4) { animation-delay: 3s; }
-
-.portfolio-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 1;
-}
-
-.portfolio-item::after {
+.video-card::before {
     content: '';
     position: absolute;
     inset: -20px;
     background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
                 var(--glow-color) 0%, transparent 70%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
     pointer-events: none;
     z-index: -1;
-    filter: blur(20px);
+    filter: blur(25px);
 }
 
-.portfolio-item:hover {
+.video-card:hover {
     transform: translateY(-20px) scale(1.08);
-    box-shadow: 0 30px 60px var(--shadow-color), 0 0 40px var(--glow-color);
+    box-shadow: 0 30px 60px var(--shadow-color), 0 0 50px var(--glow-color);
     border-color: var(--accent-primary);
     z-index: 20;
 }
 
-.portfolio-item:hover::before {
-    opacity: 0.1;
-}
-
-.portfolio-item:hover::after {
-    opacity: 0.6;
+.video-card:hover::before {
+    opacity: 0.7;
 }
 
 /* Background dim effect */
-.portfolio-item:hover ~ .portfolio-item,
-.portfolio-item:hover + .portfolio-item {
-    filter: brightness(0.7) blur(1px);
-    transform: scale(0.95);
+.video-card:hover ~ .video-card,
+.video-card:hover + .video-card {
+    filter: brightness(0.6) blur(2px);
+    transform: scale(0.92);
 }
 
-@keyframes portfolioFloat {
-    0%, 100% { transform: translateY(0px) rotateX(0deg); }
-    50% { transform: translateY(-3px) rotateX(1deg); }
-}
-
-.portfolio-image {
-    height: 250px;
+/* Video Thumbnail */
+.video-thumbnail {
     position: relative;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    border-radius: 20px;
 }
 
-.portfolio-image img {
+.video-thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s ease;
 }
 
-.portfolio-item:hover .portfolio-image img {
-    transform: scale(1.1);
+.video-card:hover .video-thumbnail img {
+    transform: scale(1.05);
 }
 
-.video-container {
+/* Play Overlay */
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+}
+
+.video-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.play-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--accent-primary);
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.video-card:hover .play-icon {
+    transform: scale(1);
+    background: white;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Video Player */
+.video-player {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 10;
     border-radius: 20px;
     overflow: hidden;
     background: #000;
-    transform: scale(1);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.video-container video {
+.video-player video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border: none;
     border-radius: 20px;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(1);
 }
 
-.portfolio-item:hover .video-container {
-    transform: scale(1.05);
-}
-
-.portfolio-item:hover .video-container video {
-    transform: scale(1.02);
-}
-
-/* Video Dock Overlay */
-.video-dock {
+/* Video Overlay */
+.video-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), transparent 60%);
+    bottom: 0;
+    pointer-events: none;
+}
+
+/* Video Title */
+.video-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), transparent 70%);
     color: white;
     padding: 2rem 1.5rem 1rem;
     transform: translateY(-100%);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 3;
-    backdrop-filter: blur(15px);
     opacity: 0;
+    backdrop-filter: blur(15px);
     font-family: 'Poppins', sans-serif;
 }
 
-.portfolio-item:hover .video-dock {
+.video-card:hover .video-title {
     transform: translateY(0);
     opacity: 1;
 }
 
-.video-dock h3 {
+.video-title h3 {
     margin-bottom: 0.5rem;
     font-size: 1.4rem;
     font-weight: 700;
@@ -900,7 +917,7 @@ section {
     letter-spacing: 0.5px;
 }
 
-.video-dock p {
+.video-title p {
     font-size: 1rem;
     opacity: 0.95;
     margin: 0;
@@ -910,36 +927,40 @@ section {
     line-height: 1.4;
 }
 
-/* Minimal Seek Bar */
-.seek-bar-container {
+/* Video Timeline */
+.video-timeline {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.15);
-    z-index: 4;
-    border-radius: 0 0 20px 20px;
-    overflow: hidden;
+    padding: 1rem;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.portfolio-item:hover .seek-bar-container {
+.video-card:hover .video-timeline {
     opacity: 1;
 }
 
-.seek-bar-progress {
+.timeline-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.timeline-progress {
     height: 100%;
     background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
     width: 0%;
     transition: width 0.1s linear;
-    border-radius: 0 0 20px 20px;
+    border-radius: 3px;
     position: relative;
     box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
-.seek-bar-progress::after {
+.timeline-progress::after {
     content: '';
     position: absolute;
     right: 0;
@@ -953,69 +974,9 @@ section {
     transition: all 0.3s ease;
 }
 
-.seek-bar-progress:hover::after {
+.timeline-progress:hover::after {
     transform: translateY(-50%) scale(1.2);
     box-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 10px rgba(139, 92, 246, 0.8);
-}
-
-.portfolio-dock {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    color: white;
-    padding: 1.5rem;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-    backdrop-filter: blur(10px);
-}
-
-.portfolio-item:hover .portfolio-dock {
-    transform: translateY(0);
-}
-
-.portfolio-dock h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.portfolio-dock p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    margin: 0;
-}
-
-.close-video-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 35px;
-    height: 35px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 4;
-    backdrop-filter: blur(10px);
-}
-
-.close-video-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-/* 3D Tilt Effect - Enhanced */
-.tilt-card {
-    transform-style: preserve-3d;
-    perspective: 1000px;
 }
 
 .tilt-card:hover {

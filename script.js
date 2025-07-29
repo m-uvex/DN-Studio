@@ -357,16 +357,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Enhanced Video Hover-to-Play with 3D Tilt and Audio Control
+// Enhanced Video Card Component with 3D Tilt and Audio Control
 document.addEventListener('DOMContentLoaded', function() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item[data-video]');
+    const videoCards = document.querySelectorAll('.video-card[data-video]');
     
-    portfolioItems.forEach(item => {
-        const videoPath = item.getAttribute('data-video');
-        const thumbnail = item.querySelector('.portfolio-thumbnail');
-        const videoContainer = item.querySelector('.video-container');
-        const video = videoContainer.querySelector('video');
-        const seekBar = videoContainer.querySelector('.seek-bar-progress');
+    videoCards.forEach(card => {
+        const videoPath = card.getAttribute('data-video');
+        const thumbnail = card.querySelector('.video-thumbnail');
+        const videoPlayer = card.querySelector('.video-player');
+        const video = videoPlayer.querySelector('video');
+        const timelineProgress = videoPlayer.querySelector('.timeline-progress');
         let isPlaying = false;
         let rafId = null;
         
@@ -374,18 +374,18 @@ document.addEventListener('DOMContentLoaded', function() {
         video.removeAttribute('controls');
         video.muted = true;
         
-        function updateSeekBar() {
-            if (video && seekBar) {
+        function updateTimeline() {
+            if (video && timelineProgress) {
                 const percent = (video.currentTime / video.duration) * 100;
-                seekBar.style.width = isNaN(percent) ? '0%' : percent + '%';
+                timelineProgress.style.width = isNaN(percent) ? '0%' : percent + '%';
             }
             if (!video.paused && !video.ended) {
-                rafId = requestAnimationFrame(updateSeekBar);
+                rafId = requestAnimationFrame(updateTimeline);
             }
         }
         
         // 3D tilt effect based on mouse movement
-        item.addEventListener('mousemove', function(e) {
+        card.addEventListener('mousemove', function(e) {
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -393,8 +393,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
+            const rotateX = (y - centerY) / 25;
+            const rotateY = (centerX - x) / 25;
             
             // Update mouse position for glow effect
             const mouseX = ((x / rect.width) * 100);
@@ -411,33 +411,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (videoPath && video) {
             // Mouse enter - start video with audio
-            item.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function() {
                 if (!isPlaying) {
                     thumbnail.style.display = 'none';
-                    videoContainer.style.display = 'block';
+                    videoPlayer.style.display = 'block';
                     video.currentTime = 0;
                     video.muted = false; // Enable audio on hover
                     video.play().then(() => {
                         isPlaying = true;
-                        rafId = requestAnimationFrame(updateSeekBar);
+                        rafId = requestAnimationFrame(updateTimeline);
                     }).catch(error => {
                         console.log('Video autoplay failed:', error);
-                        videoContainer.style.display = 'block';
+                        videoPlayer.style.display = 'block';
                         isPlaying = true;
-                        rafId = requestAnimationFrame(updateSeekBar);
+                        rafId = requestAnimationFrame(updateTimeline);
                     });
                 }
             });
             
             // Mouse leave - pause video and show thumbnail
-            item.addEventListener('mouseleave', function() {
+            card.addEventListener('mouseleave', function() {
                 if (isPlaying) {
                     video.pause();
                     video.muted = true; // Mute when not hovering
-                    videoContainer.style.display = 'none';
+                    videoPlayer.style.display = 'none';
                     thumbnail.style.display = 'block';
                     isPlaying = false;
-                    seekBar.style.width = '0%';
+                    timelineProgress.style.width = '0%';
                     if (rafId) cancelAnimationFrame(rafId);
                     
                     // Reset transform
@@ -447,10 +447,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Video ended - show thumbnail
             video.addEventListener('ended', function() {
-                videoContainer.style.display = 'none';
+                videoPlayer.style.display = 'none';
                 thumbnail.style.display = 'block';
                 isPlaying = false;
-                seekBar.style.width = '0%';
+                timelineProgress.style.width = '0%';
                 if (rafId) cancelAnimationFrame(rafId);
                 video.muted = true;
             });
