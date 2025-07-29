@@ -83,36 +83,75 @@ function initScrollAnimations() {
     });
 }
 
-// Floating Elements Animation
+// Enhanced floating elements with interactive effects
 function initFloatingElements() {
     const floatingElements = document.querySelectorAll('.floating-element');
     
-    floatingElements.forEach(element => {
+    floatingElements.forEach((element, index) => {
         const speed = element.getAttribute('data-speed') || 1;
+        
+        // Add staggered animation delay
+        element.style.animationDelay = `${index * 0.5}s`;
         
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
             const rate = scrolled * -0.5 * speed;
             element.style.transform = `translateY(${rate}px)`;
         });
+        
+        // Enhanced hover effects
+        element.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.2) rotate(15deg) translateZ(20px)';
+            this.style.boxShadow = '0 20px 50px rgba(139, 92, 246, 0.6), 0 0 30px rgba(139, 92, 246, 0.4)';
+            this.style.filter = 'brightness(1.2)';
+            
+            // Add pulse animation
+            this.style.animation = 'pulse 0.6s ease-in-out';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0deg) translateZ(0px)';
+            this.style.boxShadow = '0 10px 30px rgba(139, 92, 246, 0.3)';
+            this.style.filter = 'brightness(1)';
+            this.style.animation = 'float 6s ease-in-out infinite';
+        });
+        
+        // Add click effect
+        element.addEventListener('click', function() {
+            this.style.transform = 'scale(0.9) rotate(-5deg)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1.1) rotate(5deg)';
+            }, 150);
+        });
     });
 }
 
-// Navbar Scroll Effect
+// Enhanced navbar scroll effect for dark mode
 function initNavbarScroll() {
     const navbar = document.querySelector('.navbar');
     let lastScrollTop = 0;
     
     window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         
-        // Add/remove background on scroll
+        // Add/remove background on scroll with theme-specific colors
         if (scrollTop > 50) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            if (isDark) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
         } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = 'none';
+            if (isDark) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                navbar.style.boxShadow = 'none';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
         }
         
         // Hide/show navbar on scroll (optional)
@@ -126,7 +165,7 @@ function initNavbarScroll() {
     });
 }
 
-// Loading Animations
+// Enhanced loading animations for dark mode
 function initLoadingAnimations() {
     // Add loading class to body initially
     document.body.classList.add('loading');
@@ -135,18 +174,30 @@ function initLoadingAnimations() {
     window.addEventListener('load', function() {
         document.body.classList.add('loaded');
         
-        // Animate hero content
+        // Animate hero content with theme-specific timing
         const heroContent = document.querySelector('.hero-content');
         if (heroContent) {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const delay = isDark ? 400 : 300; // Slightly longer delay for dark mode
+            
             setTimeout(() => {
                 heroContent.style.opacity = '1';
                 heroContent.style.transform = 'translateY(0)';
-            }, 300);
+            }, delay);
         }
+        
+        // Animate floating elements with staggered timing
+        const floatingElements = document.querySelectorAll('.floating-element');
+        floatingElements.forEach((element, index) => {
+            setTimeout(() => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0) scale(1)';
+            }, 500 + (index * 100));
+        });
     });
 }
 
-// Theme Toggle Functionality
+// Theme Toggle Functionality - Enhanced
 function initThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -158,26 +209,53 @@ function initThemeToggle() {
     // Update icon based on current theme
     updateThemeIcon(currentTheme);
     
+    // Add initial animation
+    themeToggle.style.transform = 'scale(0.8)';
+    setTimeout(() => {
+        themeToggle.style.transform = 'scale(1)';
+    }, 100);
+    
     themeToggle.addEventListener('click', function() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
-        // Update theme
+        // Add click animation
+        themeToggle.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            themeToggle.style.transform = 'scale(1)';
+        }, 150);
+        
+        // Update theme with smooth transition
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         
-        // Update icon
+        // Update icon with rotation animation
         updateThemeIcon(newTheme);
+        
+        // Add theme change animation to body
+        document.body.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        document.body.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            document.body.style.transform = 'scale(1)';
+        }, 200);
     });
 }
 
 function updateThemeIcon(theme) {
     const themeIcon = document.querySelector('#theme-toggle i');
-    if (theme === 'dark') {
-        themeIcon.className = 'fas fa-sun';
-    } else {
-        themeIcon.className = 'fas fa-moon';
-    }
+    
+    // Add rotation animation
+    themeIcon.style.transform = 'rotate(180deg)';
+    themeIcon.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    
+    setTimeout(() => {
+        if (theme === 'dark') {
+            themeIcon.className = 'fas fa-sun';
+        } else {
+            themeIcon.className = 'fas fa-moon';
+        }
+        themeIcon.style.transform = 'rotate(0deg)';
+    }, 150);
 }
 
 // Service Cards Hover Effects
@@ -187,10 +265,16 @@ document.addEventListener('DOMContentLoaded', function() {
     serviceCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-10px) scale(1.02)';
+            
+            // Add glow effect in dark mode
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                this.style.boxShadow = '0 25px 50px rgba(139, 92, 246, 0.2)';
+            }
         });
         
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 10px 30px var(--shadow-color)';
         });
     });
 });
@@ -205,6 +289,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dock) {
                 dock.style.transform = 'translateY(0)';
             }
+            
+            // Add glow effect in dark mode
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                this.style.boxShadow = '0 20px 40px rgba(139, 92, 246, 0.2)';
+            }
         });
         
         item.addEventListener('mouseleave', function() {
@@ -212,11 +301,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dock) {
                 dock.style.transform = 'translateY(100%)';
             }
+            this.style.boxShadow = '0 10px 30px var(--shadow-color)';
         });
     });
 });
 
-// 3D Tilt Effect for Cards
+// Enhanced 3D tilt effect with mouse tracking and glow effects
 document.addEventListener('DOMContentLoaded', function() {
     const tiltCards = document.querySelectorAll('.tilt-card, .service-card, .tool-item, .contact-item');
     
@@ -229,57 +319,140 @@ document.addEventListener('DOMContentLoaded', function() {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+            const rotateX = (y - centerY) / 15;
+            const rotateY = (centerX - x) / 15;
             
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            // Calculate mouse position for glow effect
+            const mouseX = ((x / rect.width) * 100);
+            const mouseY = ((y / rect.height) * 100);
+            
+            // Add glow effect in dark mode
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const glowColor = isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(0, 0, 0, 0.05)';
+            
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(15px)`;
+            this.style.boxShadow = `0 25px 50px ${glowColor}`;
+            
+            // Update CSS custom properties for mouse tracking
+            this.style.setProperty('--mouse-x', `${mouseX}%`);
+            this.style.setProperty('--mouse-y', `${mouseY}%`);
         });
         
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+            this.style.boxShadow = '0 10px 30px var(--shadow-color)';
         });
+    });
+    
+    // Add floating animation to service cards
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+    });
+    
+    // Add staggered animation to portfolio items
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    portfolioItems.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.3}s`;
     });
 });
 
-// YouTube Video Hover-to-Play Functionality
+// Enhanced Video Hover-to-Play with 3D Tilt and Audio Control
 document.addEventListener('DOMContentLoaded', function() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item[data-youtube-id]');
+    const portfolioItems = document.querySelectorAll('.portfolio-item[data-video]');
     
     portfolioItems.forEach(item => {
-        const youtubeId = item.getAttribute('data-youtube-id');
+        const videoPath = item.getAttribute('data-video');
         const thumbnail = item.querySelector('.portfolio-thumbnail');
         const videoContainer = item.querySelector('.video-container');
-        const iframe = videoContainer.querySelector('iframe');
+        const video = videoContainer.querySelector('video');
+        const seekBar = videoContainer.querySelector('.seek-bar-progress');
         let isPlaying = false;
+        let rafId = null;
         
-        if (youtubeId) {
-            // Mouse enter - start video
+        // Remove controls and ensure muted by default
+        video.removeAttribute('controls');
+        video.muted = true;
+        
+        function updateSeekBar() {
+            if (video && seekBar) {
+                const percent = (video.currentTime / video.duration) * 100;
+                seekBar.style.width = isNaN(percent) ? '0%' : percent + '%';
+            }
+            if (!video.paused && !video.ended) {
+                rafId = requestAnimationFrame(updateSeekBar);
+            }
+        }
+        
+        // 3D tilt effect based on mouse movement
+        item.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            // Update mouse position for glow effect
+            const mouseX = ((x / rect.width) * 100);
+            const mouseY = ((y / rect.height) * 100);
+            
+            this.style.setProperty('--mouse-x', `${mouseX}%`);
+            this.style.setProperty('--mouse-y', `${mouseY}%`);
+            
+            // Apply 3D tilt only when hovering
+            if (isPlaying) {
+                this.style.transform = `translateY(-20px) scale(1.08) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            }
+        });
+        
+        if (videoPath && video) {
+            // Mouse enter - start video with audio
             item.addEventListener('mouseenter', function() {
                 if (!isPlaying) {
-                    // Hide thumbnail
                     thumbnail.style.display = 'none';
-                    
-                    // Show video container and load YouTube embed
                     videoContainer.style.display = 'block';
-                    const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=1`;
-                    iframe.src = embedUrl;
-                    isPlaying = true;
+                    video.currentTime = 0;
+                    video.muted = false; // Enable audio on hover
+                    video.play().then(() => {
+                        isPlaying = true;
+                        rafId = requestAnimationFrame(updateSeekBar);
+                    }).catch(error => {
+                        console.log('Video autoplay failed:', error);
+                        videoContainer.style.display = 'block';
+                        isPlaying = true;
+                        rafId = requestAnimationFrame(updateSeekBar);
+                    });
                 }
             });
             
-            // Mouse leave - stop video and show thumbnail
+            // Mouse leave - pause video and show thumbnail
             item.addEventListener('mouseleave', function() {
                 if (isPlaying) {
-                    // Stop video by clearing src
-                    iframe.src = '';
-                    
-                    // Hide video container
+                    video.pause();
+                    video.muted = true; // Mute when not hovering
                     videoContainer.style.display = 'none';
-                    
-                    // Show thumbnail again
                     thumbnail.style.display = 'block';
                     isPlaying = false;
+                    seekBar.style.width = '0%';
+                    if (rafId) cancelAnimationFrame(rafId);
+                    
+                    // Reset transform
+                    this.style.transform = 'translateY(0px) scale(1) rotateX(0deg) rotateY(0deg)';
                 }
+            });
+            
+            // Video ended - show thumbnail
+            video.addEventListener('ended', function() {
+                videoContainer.style.display = 'none';
+                thumbnail.style.display = 'block';
+                isPlaying = false;
+                seekBar.style.width = '0%';
+                if (rafId) cancelAnimationFrame(rafId);
+                video.muted = true;
             });
         }
     });
@@ -402,6 +575,63 @@ document.addEventListener('DOMContentLoaded', function() {
         initLazyLoading();
     }
 });
+
+// Add theme change listener for dynamic updates
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for theme changes and update elements accordingly
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                // Update any theme-specific elements
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                
+                // Update scrollbar colors
+                if (isDark) {
+                    document.body.style.setProperty('--scrollbar-thumb', 'linear-gradient(135deg, #8b5cf6, #a855f7)');
+                } else {
+                    document.body.style.setProperty('--scrollbar-thumb', 'linear-gradient(135deg, #667eea, #764ba2)');
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+});
+
+// Enhanced loading animations for dark mode
+function initLoadingAnimations() {
+    // Add loading class to body initially
+    document.body.classList.add('loading');
+    
+    // Remove loading class after page loads
+    window.addEventListener('load', function() {
+        document.body.classList.add('loaded');
+        
+        // Animate hero content with theme-specific timing
+        const heroContent = document.querySelector('.hero-content');
+        if (heroContent) {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const delay = isDark ? 400 : 300; // Slightly longer delay for dark mode
+            
+            setTimeout(() => {
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
+            }, delay);
+        }
+        
+        // Animate floating elements with staggered timing
+        const floatingElements = document.querySelectorAll('.floating-element');
+        floatingElements.forEach((element, index) => {
+            setTimeout(() => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0) scale(1)';
+            }, 500 + (index * 100));
+        });
+    });
+}
 
 // Console welcome message
 console.log(`
